@@ -1,71 +1,55 @@
+import Hero from './components/Hero'
+import ParallaxSection from './components/Parallax'
+import Gallery from './components/Gallery'
+import About from './components/About'
+import { useEffect, useRef } from 'react'
+
 function App() {
+  const glowRef = useRef(null)
+
+  useEffect(() => {
+    const glow = glowRef.current
+    if (!glow) return
+    const onMove = (e) => {
+      const x = e.clientX
+      const y = e.clientY
+      glow.style.transform = `translate(${x - 150}px, ${y - 150}px)`
+    }
+    window.addEventListener('pointermove', onMove)
+    return () => window.removeEventListener('pointermove', onMove)
+  }, [])
+
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900">
-      {/* Subtle pattern overlay */}
-      <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,rgba(59,130,246,0.05),transparent_50%)]"></div>
+    <div className="min-h-screen bg-white text-slate-900 dark:bg-slate-950 dark:text-white selection:bg-emerald-300/50 selection:text-emerald-900 relative">
+      {/* Cursor glow */}
+      <div ref={glowRef} className="pointer-events-none fixed z-50 h-[300px] w-[300px] rounded-full bg-emerald-400/20 blur-3xl mix-blend-screen" />
 
-      <div className="relative min-h-screen flex items-center justify-center p-8">
-        <div className="max-w-2xl w-full">
-          {/* Header with Flames icon */}
-          <div className="text-center mb-12">
-            <div className="inline-flex items-center justify-center mb-6">
-              <img
-                src="/flame-icon.svg"
-                alt="Flames"
-                className="w-24 h-24 drop-shadow-[0_0_25px_rgba(59,130,246,0.5)]"
-              />
+      <Hero />
+      <ParallaxSection />
+      <Gallery />
+      <About />
+
+      {/* CTA strip */}
+      <section className="relative py-16">
+        <div className="absolute inset-0 bg-[radial-gradient(800px_200px_at_50%_50%,rgba(16,185,129,0.08),transparent)]" />
+        <div className="relative mx-auto max-w-5xl px-6">
+          <div className="flex flex-col md:flex-row items-center justify-between gap-6 rounded-3xl border border-black/10 dark:border-white/10 bg-black/[0.03] dark:bg-white/[0.05] p-8 backdrop-blur-xl">
+            <div>
+              <h3 className="text-2xl font-bold tracking-tight">Let’s craft something unforgettable</h3>
+              <p className="mt-2 text-black/70 dark:text-white/70">Available for select collaborations. Motion-forward. Results-obsessed.</p>
             </div>
-
-            <h1 className="text-5xl font-bold text-white mb-4 tracking-tight">
-              Flames Blue
-            </h1>
-
-            <p className="text-xl text-blue-200 mb-6">
-              Build applications through conversation
-            </p>
-          </div>
-
-          {/* Instructions */}
-          <div className="bg-slate-800/50 backdrop-blur-sm border border-blue-500/20 rounded-2xl p-8 shadow-xl mb-6">
-            <div className="flex items-start gap-4 mb-6">
-              <div className="flex-shrink-0 w-8 h-8 bg-blue-500 text-white rounded-lg flex items-center justify-center font-bold">
-                1
-              </div>
-              <div>
-                <h3 className="font-semibold text-white mb-1">Describe your idea</h3>
-                <p className="text-blue-200/80 text-sm">Use the chat panel on the left to tell the AI what you want to build</p>
-              </div>
-            </div>
-
-            <div className="flex items-start gap-4 mb-6">
-              <div className="flex-shrink-0 w-8 h-8 bg-blue-500 text-white rounded-lg flex items-center justify-center font-bold">
-                2
-              </div>
-              <div>
-                <h3 className="font-semibold text-white mb-1">Watch it build</h3>
-                <p className="text-blue-200/80 text-sm">Your app will appear in this preview as the AI generates the code</p>
-              </div>
-            </div>
-
-            <div className="flex items-start gap-4">
-              <div className="flex-shrink-0 w-8 h-8 bg-blue-500 text-white rounded-lg flex items-center justify-center font-bold">
-                3
-              </div>
-              <div>
-                <h3 className="font-semibold text-white mb-1">Refine and iterate</h3>
-                <p className="text-blue-200/80 text-sm">Continue the conversation to add features and make changes</p>
-              </div>
-            </div>
-          </div>
-
-          {/* Footer */}
-          <div className="text-center">
-            <p className="text-sm text-blue-300/60">
-              No coding required • Just describe what you want
-            </p>
+            <a href="#" className="inline-flex items-center gap-2 rounded-2xl bg-emerald-500 px-6 py-3 text-black font-semibold shadow-[0_10px_30px_rgba(16,185,129,0.35)] hover:bg-emerald-400 transition">
+              Start a project <span>→</span>
+            </a>
           </div>
         </div>
-      </div>
+      </section>
+
+      <footer className="pb-12 pt-6 text-center text-sm text-black/60 dark:text-white/60">
+        <div className="mx-auto max-w-7xl px-6">
+          Built with love, motion, and a dash of chaos.
+        </div>
+      </footer>
     </div>
   )
 }
